@@ -21,6 +21,6 @@
 
 
 module top(
-
+    input wire CLK100MHZ
     );
 endmodule
