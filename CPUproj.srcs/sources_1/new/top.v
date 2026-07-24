@@ -23,4 +23,9 @@
 module top(
     input wire CLK100MHZ
     );
+    
+    datapath i_datapath (
+        .clk(CLK100MHZ)
+    );
+    
 endmodule
