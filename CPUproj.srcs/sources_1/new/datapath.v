@@ -30,7 +30,7 @@ module datapath(
         .zero_flag(flags[0]),
         .neg_flag(flags[1]),
         .carry_flag(flags[2]),
-        .overflow_flag(flags[3])
+        .over_flag(flags[3])
     );
     
     flag_register i_flag_register (
