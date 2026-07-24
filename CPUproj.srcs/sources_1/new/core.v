@@ -3,15 +3,15 @@
 // Company: 
 // Engineer: Malcolm Mohr
 // 
-// Create Date: 07/20/2026 08:48:19 PM
+// Create Date: 07/24/2026 06:03:15 PM
 // Design Name: 16-bit CPU
-// Module Name: top
+// Module Name: core
 // Project Name: 16-bit CPU
 // Target Devices: Spartan-7 XC7S25 (Arty S7-25)
 // Tool Versions: 2025.2
-// Description: 
+// Description: datapath + memory + control unit
 // 
-// Dependencies: core.v
+// Dependencies: datapath.v, memory.v
 // 
 // Revision:
 // Revision 0.01 - File Created
@@ -20,12 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module top(
-    input wire CLK100MHZ
+module core(
+        input wire clk
     );
-    
-    core i_core (
-        .clk(CLK100MHZ)
-    );
-    
 endmodule
