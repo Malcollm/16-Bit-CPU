@@ -37,7 +37,7 @@ module ALU(
     output reg zero_flag,
     output reg neg_flag,
     output reg carry_flag,
-    output reg overflow_flag
+    output reg over_flag
     );
 
     reg [16:0] arith;
@@ -56,24 +56,25 @@ module ALU(
             default: arith = 17'b0;
         endcase
         
+        y = arith[15:0];
+        
+        // Update flags
         case(op)
             OP_ADD: begin
-                overflow_flag = (a[15] == b[15]) && (y[15] != a[15]);
+                over_flag = (a[15] == b[15]) && (y[15] != a[15]);
                 carry_flag = arith[16];
             end
             
             OP_SUB: begin
-                overflow_flag = (a[15] != b[15]) && (y[15] != a[15]);
+                over_flag = (a[15] != b[15]) && (y[15] != a[15]);
                 carry_flag = arith[16];
             end
             
             default: begin
-                overflow_flag = 1'b0;  // meaningless for AND/OR
+                over_flag = 1'b0;  // meaningless for AND/OR
                 carry_flag = 1'b0;
             end
         endcase
-
-        y = arith[15:0];
 
         zero_flag  = (y == 16'b0);
         neg_flag   = y[15];
