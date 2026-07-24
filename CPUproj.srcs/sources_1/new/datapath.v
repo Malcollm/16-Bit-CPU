@@ -15,7 +15,8 @@
 // 
 // Revision:
 // Revision 0.01 - File Created
-// Revisoin 0.02 - Added ALU and flag register to datapath
+// Revision 0.02 - Added ALU and flag register to datapath
+// Revision 0.03 - Added the register file to datapath
 // Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
@@ -24,7 +25,10 @@
 module datapath(
     input wire clk
     );
+    
     wire [3:0] flags;
+    wire [15:0] reg_data_a;
+    wire [15:0] reg_data_b;
     
     ALU i_alu (
         .zero_flag(flags[0]),
@@ -34,6 +38,13 @@ module datapath(
     );
     
     flag_register i_flag_register (
-        .flag_inputs(flags)
+        .flag_inputs(flags),
+        .clk(clk)
+    );
+    
+    register_file i_register_file (
+        .clk(clk),
+        .out_a(reg_data_a),
+        .out_b(reg_data_b)
     );
 endmodule
