@@ -17,6 +17,7 @@
 // Revision 0.01 - File Created
 // Revision 0.02 - Added ALU and flag register to datapath
 // Revision 0.03 - Added the register file to datapath
+// Revision 0.04 - Added PC and IR to datapath
 // Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
@@ -30,6 +31,8 @@ module datapath(
     wire [15:0] reg_data_a;
     wire [15:0] reg_data_b;
     
+    wire reset;
+    
     ALU i_alu (
         .zero_flag(flags[0]),
         .neg_flag(flags[1]),
@@ -39,12 +42,24 @@ module datapath(
     
     flag_register i_flag_register (
         .flag_inputs(flags),
-        .clk(clk)
+        .clk(clk),
+        .reset(reset)
     );
     
     register_file i_register_file (
         .clk(clk),
         .out_a(reg_data_a),
         .out_b(reg_data_b)
+    );
+    
+    program_counter i_program_counter (
+        .clk(clk),
+        .reset(reset),
+        .addr(reg_data_a)
+    );
+    
+    instruction_register i_instruction_register (
+        .clk(clk),
+        .reset(reset)
     );
 endmodule
