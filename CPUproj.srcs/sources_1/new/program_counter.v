@@ -16,6 +16,7 @@
 // Revision:
 // Revision 0.01 - File Created
 // Revision 0.02 - Made PC
+// Revision 0.03 - Added controlled increment
 // Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
@@ -25,8 +26,10 @@ module program_counter(
         input wire clk,
         
         input wire [15:0] addr,
+        
         input wire write,
         input wire reset,
+        input wire inc,
         
         output reg [15:0] out
     );
@@ -35,11 +38,10 @@ module program_counter(
         if (reset) begin
             out <= 16'b0;
         end
-        
-        if (write) begin
+        else if (write) begin
             out <= addr;
         end
-        else begin
+        else if (inc) begin
             out <= out + 1;
         end
     end
