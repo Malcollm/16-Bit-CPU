@@ -37,7 +37,7 @@ module register_file(
         output reg [15:0] out_b
     );
     
-    reg [15:0] data [0:15];
+    reg [15:0] data [0:15]; // Where data is stored
     
     always @(posedge clk) begin
         if (clear_reg) begin
