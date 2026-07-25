@@ -11,7 +11,7 @@
 // Tool Versions: Vivado 2025.2
 // Description: 
 // 
-// Dependencies: ALU.v, flag_register.v, register_file.v, program_counter.v, instruction_register.v, io_register.v
+// Dependencies: ALU.v, flag_register.v, register_file.v, program_counter.v, io_register.v
 // 
 // Revision:
 // Revision 0.01 - File Created
@@ -19,6 +19,7 @@
 // Revision 0.03 - Added the register file to datapath
 // Revision 0.04 - Added PC and IR to datapath
 // Revision 0.05 - Added IO register to datapath
+// Revision 0.06 - Removed IR
 // Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
@@ -26,19 +27,19 @@
 
 module datapath(
     input wire clk,
+    input wire reset,
     
-    input wire [15:0] ir_in,
+    input wire [15:0] reg_data_in,    // Register file input
+    
     output wire [15:0] pc_out,
     output wire [15:0] alu_out,
-    output wire [15:0] in_out
+    output wire [15:0] in_out,
+    output wire [3:0] flag_out
     );
     
     wire [3:0] flags;           // Flags from ALU
     wire [15:0] reg_data_a;     // Register file outputs
     wire [15:0] reg_data_b;
-    wire [15:0] reg_data_in;    // Register file input 
-    
-    wire reset;
     
     ALU i_alu (
         .zero_flag(flags[0]),
@@ -52,6 +53,7 @@ module datapath(
     
     flag_register i_flag_register (
         .flag_inputs(flags),
+        .flag_outputs(flag_out),
         .clk(clk),
         .reset(reset)
     );
@@ -68,12 +70,6 @@ module datapath(
         .reset(reset),
         .addr(reg_data_a),
         .out(pc_out)
-    );
-    
-    instruction_register i_instruction_register (
-        .clk(clk),
-        .reset(reset),
-        .data_in(ir_in)
     );
     
     io_register i_io_register (
