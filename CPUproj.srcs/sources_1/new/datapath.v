@@ -34,7 +34,23 @@ module datapath(
     output wire [15:0] pc_out,
     output wire [15:0] alu_out,
     output wire [15:0] in_out,
-    output wire [3:0] flag_out
+    
+    input wire [1:0] alu_op,
+    input wire flag_en,
+    output wire [3:0] flag_out,
+    
+    input wire reg_write,
+    input wire [3:0] reg_addr_a,
+    input wire [3:0] reg_addr_b,
+    input wire [3:0] reg_addr_w,
+    
+    input wire pc_inc,
+    input wire pc_write,
+    input wire [15:0] pc_in,
+    
+    input wire latch_out,
+    input wire [15:0] in_in,
+    output wire [15:0] out_out
     );
     
     wire [3:0] flags;           // Flags from ALU
@@ -48,12 +64,14 @@ module datapath(
         .over_flag(flags[3]),
         .a(reg_data_a),
         .b(reg_data_b),
-        .y(alu_out)
+        .y(alu_out),
+        .op(alu_op)
     );
     
     flag_register i_flag_register (
         .flag_inputs(flags),
         .flag_outputs(flag_out),
+        .enable(flag_en),
         .clk(clk),
         .reset(reset)
     );
@@ -62,20 +80,29 @@ module datapath(
         .clk(clk),
         .out_a(reg_data_a),
         .out_b(reg_data_b),
-        .data_in(reg_data_in)
+        .data_in(reg_data_in),
+        .write(reg_write),
+        .addr_a(reg_addr_a),
+        .addr_b(reg_addr_b),
+        .addr_w(reg_addr_w)
     );
     
     program_counter i_program_counter (
         .clk(clk),
         .reset(reset),
-        .addr(reg_data_a),
-        .out(pc_out)
+        .addr(pc_in),
+        .out(pc_out),
+        .inc(pc_inc),
+        .write(pc_write)
     );
     
     io_register i_io_register (
         .clk(clk),
         .reset(reset),
         .out_in(reg_data_a),
-        .in_out(in_out)
+        .out_out(out_out),
+        .in_out(in_out),
+        .in_in(in_in),
+        .latch_out(latch_out)
     );
 endmodule

@@ -16,6 +16,7 @@
 // Revision:
 // Revision 0.01 - File Created
 // Revision 0.02 - Added register file
+// Revision 0.03 - Removed register clear
 // Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
@@ -27,7 +28,6 @@ module register_file(
         input wire [3:0] addr_w,
         
         input wire write,
-        input wire clear_reg, // Clears register at write address
         
         input wire clk,
         
@@ -40,10 +40,6 @@ module register_file(
     reg [15:0] data [0:15]; // Where data is stored
     
     always @(posedge clk) begin
-        if (clear_reg) begin
-            data[addr_w] <= 16'b0;
-        end
-    
         if (write) begin
             data[addr_w] <= data_in;
         end

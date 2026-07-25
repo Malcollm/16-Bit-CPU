@@ -44,6 +44,9 @@ module core(
         else if (alu_to_reg) begin
             reg_in = alu_out;
         end
+        else begin
+            reg_in = in_out;
+        end
     end
     
     instruction_register i_instruction_register (
