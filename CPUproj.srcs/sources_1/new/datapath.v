@@ -20,6 +20,7 @@
 // Revision 0.04 - Added PC and IR to datapath
 // Revision 0.05 - Added IO register to datapath
 // Revision 0.06 - Removed IR
+// Revision 0.07 - Added IR back
 // Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
@@ -50,7 +51,11 @@ module datapath(
     
     input wire latch_out,
     input wire [15:0] in_in,
-    output wire [15:0] out_out
+    output wire [15:0] out_out,
+    
+    input wire ir_write,
+    input wire [15:0] ir_in,
+    output wire [15:0] ir_out
     );
     
     wire [3:0] flags;           // Flags from ALU
@@ -104,5 +109,13 @@ module datapath(
         .in_out(in_out),
         .in_in(in_in),
         .latch_out(latch_out)
+    );
+    
+    instruction_register i_instruction_register (
+        .clk(clk),
+        .reset(reset),
+        .write(ir_write),
+        .data_in(ir_in),
+        .data_out(ir_out)
     );
 endmodule

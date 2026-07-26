@@ -11,7 +11,7 @@
 // Tool Versions: 2025.2
 // Description: datapath + memory + control unit
 // 
-// Dependencies: datapath.v, memory.v, instruction_register.v
+// Dependencies: datapath.v, memory.v
 // 
 // Revision:
 // Revision 0.01 - File Created
@@ -36,24 +36,6 @@ module core(
     wire [15:0] in_out;
     wire [15:0] mem_out;
     reg [15:0] reg_in;
-    
-    always @(*) begin
-        if (mem_to_reg) begin
-            reg_in = mem_out;
-        end
-        else if (alu_to_reg) begin
-            reg_in = alu_out;
-        end
-        else begin
-            reg_in = in_out;
-        end
-    end
-    
-    instruction_register i_instruction_register (
-        .clk(clk),
-        .reset(reset),
-        .data_in(mem_out)
-    );
     
     datapath i_datapath (
         .clk(clk),
