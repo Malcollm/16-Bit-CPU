@@ -11,7 +11,7 @@
 // Tool Versions: Vivado 2025.2
 // Description: 
 // 
-// Dependencies: ALU.v, flag_register.v, register_file.v, program_counter.v, io_register.v
+// Dependencies: ALU.v, flag_register.v, register_file.v, program_counter.v, io_register.v, instruction_register.v, subroutine_register.v
 // 
 // Revision:
 // Revision 0.01 - File Created
@@ -21,6 +21,7 @@
 // Revision 0.05 - Added IO register to datapath
 // Revision 0.06 - Removed IR
 // Revision 0.07 - Added IR back
+// Revisoin 0.08 - Added SRR
 // Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
@@ -32,7 +33,6 @@ module datapath(
     
     input wire [15:0] reg_data_in,    // Register file input
     
-    output wire [15:0] pc_out,
     output wire [15:0] alu_out,
     output wire [15:0] in_out,
     
@@ -48,6 +48,7 @@ module datapath(
     input wire pc_inc,
     input wire pc_write,
     input wire [15:0] pc_in,
+    output wire [15:0] pc_out,
     
     input wire latch_out,
     input wire [15:0] in_in,
@@ -55,7 +56,10 @@ module datapath(
     
     input wire ir_write,
     input wire [15:0] ir_in,
-    output wire [15:0] ir_out
+    output wire [15:0] ir_out,
+    
+    input wire srr_write,
+    output wire [15:0] srr_out
     );
     
     wire [3:0] flags;           // Flags from ALU
@@ -117,5 +121,12 @@ module datapath(
         .write(ir_write),
         .data_in(ir_in),
         .data_out(ir_out)
+    );
+    
+    subroutine_register i_subroutine_register (
+        .clk(clk),
+        .write(srr_write),
+        .data_in(pc_out),
+        .data_out(srr_out)
     );
 endmodule
