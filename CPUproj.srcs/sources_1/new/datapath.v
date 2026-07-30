@@ -34,7 +34,6 @@ module datapath(
     input wire [15:0] reg_data_in,    // Register file input
     
     output wire [15:0] alu_out,
-    output wire [15:0] in_out,
     
     input wire [1:0] alu_op,
     input wire flag_en,
@@ -52,6 +51,8 @@ module datapath(
     
     input wire latch_out,
     input wire [15:0] in_in,
+    output wire [15:0] in_out,
+    input wire [15:0] out_in,
     output wire [15:0] out_out,
     
     input wire ir_write,
@@ -59,11 +60,12 @@ module datapath(
     output wire [15:0] ir_out,
     
     input wire srr_write,
-    output wire [15:0] srr_out
+    output wire [15:0] srr_out,
+    
+    output wire [15:0] reg_data_a
     );
     
     wire [3:0] flags;           // Flags from ALU
-    wire [15:0] reg_data_a;     // Register file outputs
     wire [15:0] reg_data_b;
     
     ALU i_alu (
