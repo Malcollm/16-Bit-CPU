@@ -24,11 +24,12 @@
 module sequencer(
         input wire clk,
         input wire reset,
+        input wire comp,
         output reg [2:0] cycle_data
     );
     
     always @(posedge clk) begin
-        if (reset) begin
+        if (reset | comp) begin
             cycle_data <= 3'b0;
         end
         else begin

@@ -21,11 +21,18 @@
 
 
 module top(
-    input wire CLK100MHZ
+    input wire CLK100MHZ,
+    input wire [7:0] ja,
+    input wire [7:0] jb,
+    
+    output wire [7:0] jc,
+    output wire [7:0] jd
     );
     
     core i_core (
-        .clk(CLK100MHZ)
+        .clk(CLK100MHZ),
+        .in_in({ja, jb}),
+        .out_out({jc, jd})
     );
     
 endmodule

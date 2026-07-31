@@ -16,6 +16,7 @@
 // Revision:
 // Revision 0.01 - File Created
 // Revision 0.02 - Added memory and datapath
+// Revision 0.03 - Added control unit
 // Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
@@ -23,7 +24,10 @@
 
 module core(
         input wire clk,
-        input wire reset
+        input wire reset,
+        
+        input wire [15:0] in_in,
+        output wire [15:0] out_out
     );
     
     wire mem_to_reg;
@@ -44,6 +48,7 @@ module core(
     wire [15:0] mem_in;
 
     wire [15:0] alu_out;
+    wire [3:0] flag_out;
     
     wire [15:0] srr_out;
     
@@ -73,13 +78,13 @@ module core(
         .reg_data_in(reg_in),
         .alu_out(alu_out),
         .ir_out(ir_out),
-        .in_out(in_out),
         .out_in(out_in),
         .pc_out(pc_out),
         .reg_data_a(reg_out_a),
-        .ir_out(ir_out),
-        .srr_out(srr_out)
-        
+        .srr_out(srr_out),
+        .flag_out(flag_out),
+        .in_in(in_in),
+        .out_out(out_out)
     );
     
     memory i_memory (
@@ -87,6 +92,13 @@ module core(
         .mem_out(mem_out),
         .mem_in(mem_in),
         .write(reg_to_mem)
+    );
+    
+    control_unit i_control_unit (
+        .clk(clk),
+        .reset(reset),
+        .ir_out(ir_out[15:8]),
+        .flags(flag_out)
     );
     
 endmodule

@@ -22,6 +22,15 @@
 
 
 module control_unit(
-        
+        input wire clk,
+        input wire reset,
+        input wire [8:0] ir_out,
+        input wire [3:0] flags
     );
+    
+    sequencer i_sequencer (
+        .clk(clk),
+        .reset(reset)
+    );
+    
 endmodule
