@@ -35,7 +35,7 @@ module datapath(
     
     output wire [15:0] alu_out,
     
-    input wire [1:0] alu_op,
+    input wire [2:0] alu_op,
     input wire flag_en,
     output wire [3:0] flag_out,
     

@@ -29,7 +29,7 @@
 module ALU(
     input wire [15:0] a,
     input wire [15:0] b,
-    input wire [1:0] op,
+    input wire [2:0] op,
 
     output reg [15:0] y,
 
@@ -42,10 +42,10 @@ module ALU(
 
     reg [16:0] arith;
 
-    localparam OP_ADD = 2'b00;
-    localparam OP_SUB = 2'b01;
-    localparam OP_AND = 2'b10;
-    localparam OP_OR  = 2'b11;
+    localparam OP_ADD = 3'b000;
+    localparam OP_SUB = 3'b001;
+    localparam OP_AND = 3'b010;
+    localparam OP_OR  = 3'b011;
 
     always @(*) begin
         case(op)
