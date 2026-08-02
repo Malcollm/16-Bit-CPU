@@ -20,6 +20,7 @@
 // Revision 0.01 - File Created
 // Revision 0.02 - Fixed zero_flag/neg_flag to check y instead of wide arith reg
 // Revision 0.03 - Removed unused clk input (ALU is purely combinational) 
+// Revision 0.04 - Added more logical operations
 // Additional Comments:
 // carry_flag is only meaningful for OP_ADD/OP_SUB; forced to 0 for AND/OR.
 // 
@@ -46,6 +47,10 @@ module ALU(
     localparam OP_SUB = 3'b001;
     localparam OP_AND = 3'b010;
     localparam OP_OR  = 3'b011;
+    localparam OP_XOR = 3'b100;
+    localparam OP_NOT = 3'b101;
+    localparam OP_LSL = 3'b110;
+    localparam OP_LSR = 3'b111;
 
     always @(*) begin
         case(op)
@@ -53,6 +58,10 @@ module ALU(
             OP_SUB:  arith = {1'b0, a} - {1'b0, b};
             OP_AND:  arith = {1'b0, a & b};
             OP_OR:   arith = {1'b0, a | b};
+            OP_XOR:  arith = {1'b0, a ^ b};
+            OP_NOT:  arith = {1'b0, ~a};
+            OP_LSL:  arith = {a, 1'b0};
+            OP_LSR:  arith = {a[0], 1'b0, a[15:1]};
             default: arith = 17'b0;
         endcase
         
