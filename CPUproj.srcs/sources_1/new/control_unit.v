@@ -38,7 +38,8 @@ module control_unit(
         
         output wire pc_inc,
         output reg reg_to_pc,
-        output reg pc_to_srr
+        output reg pc_to_srr,
+        output reg srr_to_pc
     );
     
     wire [2:0] cycle_data;
@@ -73,6 +74,7 @@ module control_unit(
         alu_to_reg = 1'b0;
         reg_to_pc = 1'b0;
         pc_to_srr = 1'b0;
+        srr_to_pc = 1'b0;
         sequencer_com = 1'b0;
     
         case (ir_out[15:12])
@@ -122,6 +124,11 @@ module control_unit(
                     pc_to_srr = 1'b1;
                     sequencer_com = 1'b1;
                 end
+            end
+            
+            RET: begin
+                srr_to_pc = 1'b1;
+                sequencer_com = 1'b1;
             end
         endcase
     end

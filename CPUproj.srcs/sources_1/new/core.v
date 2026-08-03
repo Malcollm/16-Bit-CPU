@@ -126,7 +126,8 @@ module core(
         .reg_addr_w(reg_addr_w),
         .pc_inc(pc_inc),
         .reg_to_pc(reg_to_pc),
-        .pc_to_srr(pc_to_srr)
+        .pc_to_srr(pc_to_srr),
+        .srr_to_pc(srr_to_pc)
     );
     
 endmodule
