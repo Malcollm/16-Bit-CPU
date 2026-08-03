@@ -30,7 +30,9 @@ module control_unit(
         
         output reg [3:0] reg_addr_a,
         output reg [3:0] reg_addr_b,
-        output reg [3:0] reg_addr_w
+        output reg [3:0] reg_addr_w,
+        
+        output reg [2:0] alu_op
     );
     
     wire [2:0] cycle_data;
@@ -59,10 +61,29 @@ module control_unit(
     always @(*) begin
         flag_en = 1'b0;
     
-        case (ir_out[3:0])
+        case (ir_out[15:12])
             ADD: begin
                 flag_en = 1'b1;
-                reg_addr_a = ir_out[15:12];
+                reg_addr_a = ir_out[11:8];
+                reg_addr_b = ir_out[7:4];
+                reg_addr_w = ir_out[3:0];
+                alu_op = 3'b000;
+            end
+            
+            SUB: begin
+                flag_en = 1'b1;
+                reg_addr_a = ir_out[11:8];
+                reg_addr_b = ir_out[7:4];
+                reg_addr_w = ir_out[3:0];
+                alu_op = 3'b001;
+            end
+            
+            LOG: begin
+                flag_en = ir_out[11];
+                reg_addr_a = ir_out[3:0];
+                reg_addr_b = ir_out[7:4];
+                reg_addr_w = ir_out[3:0];
+                alu_op = ir_out[10:8];
             end
         endcase
     end
