@@ -134,7 +134,8 @@ module core(
         .mem_addr(mem_addr),
         .mem_to_reg(mem_to_reg),
         .reg_out_a(reg_out_a),
-        .reg_out_b(reg_out_b)
+        .reg_out_b(reg_out_b),
+        .reg_to_mem(reg_to_mem)
     );
     
 endmodule

@@ -18,6 +18,7 @@
 // Revision 0.02 - Started control unit
 // Revision 0.03 - Added ops ADD SUB LOG
 // Revision 0.04 - Added ops up to LD and LDR
+// Revision 0.05 - Added ST and STR
 // Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
@@ -46,11 +47,14 @@ module control_unit(
         output wire pc_inc,
         output reg reg_to_pc,
         output reg pc_to_srr,
-        output reg srr_to_pc
+        output reg srr_to_pc, 
+        output reg reg_to_mem
     );
     
     wire [2:0] cycle_data;
     reg sequencer_com;
+    
+    reg [15:0] temp_mem_addr;
     
     assign pc_inc = sequencer_com;
     
@@ -81,6 +85,7 @@ module control_unit(
         alu_to_reg = 1'b0;
         mem_to_reg = 1'b0;
         reg_to_pc = 1'b0;
+        reg_to_mem = 1'b0;
         pc_to_srr = 1'b0;
         srr_to_pc = 1'b0;
         sequencer_com = 1'b0;
@@ -153,6 +158,26 @@ module control_unit(
                 reg_addr_w = ir_out[3:0];
                 mem_addr = reg_out_a + reg_out_b;
                 sequencer_com = 1'b1;
+            end
+            
+            ST: begin
+                reg_to_mem = 1'b1;
+                mem_addr = {8'b000000000, ir_out[11:4]};
+                reg_addr_a = ir_out[3:0];
+                sequencer_com = 1'b1;
+            end
+            
+            STR: begin
+                if (cycle_data == 3'b000) begin
+                    reg_addr_a = ir_out[11:8];
+                    reg_addr_b = ir_out[7:4];
+                    temp_mem_addr = reg_out_a + reg_out_b;
+                end else begin
+                    reg_to_mem = 1'b1;
+                    reg_addr_a = ir_out[3:0];
+                    mem_addr = temp_mem_addr;
+                    sequencer_com = 1'b1;
+                end
             end
         endcase
     end
