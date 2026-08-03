@@ -28,6 +28,7 @@ module control_unit(
         output reg flag_en,
         input wire [3:0] flags,
         
+        output reg alu_to_reg,
         output reg [3:0] reg_addr_a,
         output reg [3:0] reg_addr_b,
         output reg [3:0] reg_addr_w,
@@ -60,10 +61,12 @@ module control_unit(
     
     always @(*) begin
         flag_en = 1'b0;
+        alu_to_reg = 1'b0;
     
         case (ir_out[15:12])
             ADD: begin
                 flag_en = 1'b1;
+                alu_to_reg = 1'b1;
                 reg_addr_a = ir_out[11:8];
                 reg_addr_b = ir_out[7:4];
                 reg_addr_w = ir_out[3:0];
@@ -72,6 +75,7 @@ module control_unit(
             
             SUB: begin
                 flag_en = 1'b1;
+                alu_to_reg = 1'b1;
                 reg_addr_a = ir_out[11:8];
                 reg_addr_b = ir_out[7:4];
                 reg_addr_w = ir_out[3:0];
@@ -80,6 +84,7 @@ module control_unit(
             
             LOG: begin
                 flag_en = ir_out[11];
+                alu_to_reg = 1'b1;
                 reg_addr_a = ir_out[3:0];
                 reg_addr_b = ir_out[7:4];
                 reg_addr_w = ir_out[3:0];
