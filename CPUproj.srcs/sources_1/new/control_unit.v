@@ -17,6 +17,7 @@
 // Revision 0.01 - File Created
 // Revision 0.02 - Started control unit
 // Revision 0.03 - Added ops ADD SUB LOG
+// Revision 0.04 - Added ops up to LD and LDR
 // Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
@@ -25,14 +26,20 @@
 module control_unit(
         input wire clk,
         input wire reset,
+        
         input wire [15:0] ir_out,
         output reg flag_en,
         input wire [3:0] flags,
         
         output reg alu_to_reg,
+        input wire reg_out_a,
+        input wire reg_out_b,
         output reg [3:0] reg_addr_a,
         output reg [3:0] reg_addr_b,
         output reg [3:0] reg_addr_w,
+        
+        output reg mem_to_reg,
+        output reg [15:0] mem_addr,
         
         output reg [2:0] alu_op,
         
@@ -72,6 +79,7 @@ module control_unit(
     always @(*) begin
         flag_en = 1'b0;
         alu_to_reg = 1'b0;
+        mem_to_reg = 1'b0;
         reg_to_pc = 1'b0;
         pc_to_srr = 1'b0;
         srr_to_pc = 1'b0;
@@ -128,6 +136,22 @@ module control_unit(
             
             RET: begin
                 srr_to_pc = 1'b1;
+                sequencer_com = 1'b1;
+            end
+            
+            LD: begin
+                mem_to_reg = 1'b1;
+                mem_addr = {8'b000000000, ir_out[11:4]};
+                reg_addr_w = ir_out[3:0];
+                sequencer_com = 1'b1;
+            end
+            
+            LDR: begin
+                mem_to_reg = 1'b1;
+                reg_addr_a = ir_out[11:8];
+                reg_addr_b = ir_out[7:4];
+                reg_addr_w = ir_out[3:0];
+                mem_addr = reg_out_a + reg_out_b;
                 sequencer_com = 1'b1;
             end
         endcase

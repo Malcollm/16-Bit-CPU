@@ -62,7 +62,8 @@ module datapath(
     input wire srr_write,
     output wire [15:0] srr_out,
     
-    output wire [15:0] reg_data_a
+    output wire [15:0] reg_data_a,
+    output wire [15:0] reg_data_b
     );
     
     wire [3:0] flags;           // Flags from ALU

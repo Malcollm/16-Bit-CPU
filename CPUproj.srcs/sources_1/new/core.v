@@ -48,6 +48,7 @@ module core(
     
     wire [15:0] mem_out;
     wire [15:0] mem_in;
+    wire [15:0] mem_addr;
 
     wire [15:0] alu_out;
     wire [2:0] alu_op;
@@ -91,6 +92,7 @@ module core(
         .out_in(out_in),
         .pc_out(pc_out),
         .reg_data_a(reg_out_a),
+        .reg_data_b(reg_out_b),
         .srr_out(srr_out),
         .flag_out(flag_out),
         .in_in(in_in),
@@ -110,6 +112,7 @@ module core(
         .clk(clk),
         .mem_out(mem_out),
         .mem_in(mem_in),
+        .addr(mem_addr),
         .write(reg_to_mem)
     );
     
@@ -127,7 +130,11 @@ module core(
         .pc_inc(pc_inc),
         .reg_to_pc(reg_to_pc),
         .pc_to_srr(pc_to_srr),
-        .srr_to_pc(srr_to_pc)
+        .srr_to_pc(srr_to_pc),
+        .mem_addr(mem_addr),
+        .mem_to_reg(mem_to_reg),
+        .reg_out_a(reg_out_a),
+        .reg_out_b(reg_out_b)
     );
     
 endmodule
