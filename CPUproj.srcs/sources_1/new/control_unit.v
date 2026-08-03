@@ -37,7 +37,8 @@ module control_unit(
         output reg [2:0] alu_op,
         
         output wire pc_inc,
-        output reg reg_to_pc
+        output reg reg_to_pc,
+        output reg pc_to_srr
     );
     
     wire [2:0] cycle_data;
@@ -49,7 +50,7 @@ module control_unit(
     localparam SUB = 4'b0001;
     localparam LOG = 4'b0010;
     localparam JMP = 4'b0011;
-    localparam JST = 4'b0100;
+    localparam JTS = 4'b0100;
     localparam RET = 4'b0101;
     localparam LD = 4'b0110;
     localparam LDR = 4'b0111;
@@ -71,6 +72,7 @@ module control_unit(
         flag_en = 1'b0;
         alu_to_reg = 1'b0;
         reg_to_pc = 1'b0;
+        pc_to_srr = 1'b0;
         sequencer_com = 1'b0;
     
         case (ir_out[15:12])
@@ -110,6 +112,16 @@ module control_unit(
                     reg_to_pc = 1'b1;
                 end
                 sequencer_com = 1'b1;
+            end
+            
+            JTS: begin
+                if (cycle_data == 3'b000) begin
+                    reg_addr_a = ir_out[7:4];
+                    reg_to_pc = 1'b1;
+                end else begin
+                    pc_to_srr = 1'b1;
+                    sequencer_com = 1'b1;
+                end
             end
         endcase
     end
