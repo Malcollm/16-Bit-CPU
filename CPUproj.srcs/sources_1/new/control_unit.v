@@ -16,6 +16,7 @@
 // Revision:
 // Revision 0.01 - File Created
 // Revision 0.02 - Started control unit
+// Revision 0.03 - Added ops ADD SUB LOG
 // Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
@@ -33,10 +34,16 @@ module control_unit(
         output reg [3:0] reg_addr_b,
         output reg [3:0] reg_addr_w,
         
-        output reg [2:0] alu_op
+        output reg [2:0] alu_op,
+        
+        output wire pc_inc,
+        output reg reg_to_pc
     );
     
     wire [2:0] cycle_data;
+    reg sequencer_com;
+    
+    assign pc_inc = sequencer_com;
     
     localparam ADD = 4'b0000;
     localparam SUB = 4'b0001;
@@ -56,12 +63,15 @@ module control_unit(
     sequencer i_sequencer (
         .clk(clk),
         .reset(reset),
+        .comp(sequencer_com),
         .cycle_data(cycle_data)
     );
     
     always @(*) begin
         flag_en = 1'b0;
         alu_to_reg = 1'b0;
+        reg_to_pc = 1'b0;
+        sequencer_com = 1'b0;
     
         case (ir_out[15:12])
             ADD: begin
@@ -71,6 +81,7 @@ module control_unit(
                 reg_addr_b = ir_out[7:4];
                 reg_addr_w = ir_out[3:0];
                 alu_op = 3'b000;
+                sequencer_com = 1'b1;
             end
             
             SUB: begin
@@ -80,6 +91,7 @@ module control_unit(
                 reg_addr_b = ir_out[7:4];
                 reg_addr_w = ir_out[3:0];
                 alu_op = 3'b001;
+                sequencer_com = 1'b1;
             end
             
             LOG: begin
@@ -87,8 +99,17 @@ module control_unit(
                 alu_to_reg = 1'b1;
                 reg_addr_a = ir_out[3:0];
                 reg_addr_b = ir_out[7:4];
-                reg_addr_w = ir_out[3:0];
+                reg_addr_w = ir_out[7:4];
                 alu_op = ir_out[10:8];
+                sequencer_com = 1'b1;
+            end
+            
+            JMP: begin
+                if (&(~ir_out[11:8] | flags)) begin
+                    reg_addr_a = ir_out[7:4];
+                    reg_to_pc = 1'b1;
+                end
+                sequencer_com = 1'b1;
             end
         endcase
     end
