@@ -41,6 +41,8 @@ module core(
     
     wire reg_to_mem;
     
+    wire flag_en;
+    
     wire [15:0] ir_out;
     wire [15:0] ir_in;
     
@@ -60,6 +62,10 @@ module core(
     
     wire [15:0] reg_out_a;
     wire [15:0] reg_in;
+    
+    wire [3:0] reg_addr_a;
+    wire [3:0] reg_addr_b;
+    wire [3:0] reg_addr_w;
     
     assign reg_in = mem_to_reg ? mem_out :
                     alu_to_reg ? alu_out : 
@@ -84,7 +90,11 @@ module core(
         .srr_out(srr_out),
         .flag_out(flag_out),
         .in_in(in_in),
-        .out_out(out_out)
+        .out_out(out_out),
+        .reg_addr_a(reg_addr_a),
+        .reg_addr_b(reg_addr_b),
+        .reg_addr_w(reg_addr_w),
+        .flag_en(flag_en)
     );
     
     memory i_memory (
@@ -97,8 +107,9 @@ module core(
     control_unit i_control_unit (
         .clk(clk),
         .reset(reset),
-        .ir_out(ir_out[15:8]),
-        .flags(flag_out)
+        .ir_out(ir_out),
+        .flags(flag_out),
+        .flag_en(flag_en)
     );
     
 endmodule

@@ -80,7 +80,7 @@ module ALU(
             end
             
             default: begin
-                over_flag = 1'b0;  // meaningless for AND/OR
+                over_flag = 1'b0;
                 carry_flag = 1'b0;
             end
         endcase
