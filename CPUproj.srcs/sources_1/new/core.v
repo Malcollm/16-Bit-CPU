@@ -83,7 +83,6 @@ module core(
                     reg_out_a;
     
     assign mem_in = reg_out_a;
-    assign ir_in = mem_out;
     assign pc_in = reg_to_pc ? reg_out_a : srr_out;
     assign out_in = reg_out_a;
     
@@ -112,7 +111,9 @@ module core(
         .pc_inc(pc_inc),
         .srr_write(pc_to_srr),
         .out_write(reg_to_out),
-        .in_out(in_out)
+        .in_out(in_out),
+        .ir_write(1'b1),
+        .pc_in(pc_in)
     );
     
     memory i_memory (

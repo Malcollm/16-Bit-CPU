@@ -27,7 +27,7 @@ module program_rom (
     output reg [15:0] rom_out
 );
 
-    reg [15:0] rom [0:4];
+    reg [15:0] rom [0:20];
 
     initial begin
         $readmemh("program.mem", rom);
