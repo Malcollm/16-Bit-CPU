@@ -35,8 +35,8 @@ module control_unit(
         input wire [3:0] flags,
         
         output reg alu_to_reg,
-        input wire reg_out_a,
-        input wire reg_out_b,
+        input wire [15:0] reg_out_a,
+        input wire [15:0] reg_out_b,
         output reg [3:0] reg_addr_a,
         output reg [3:0] reg_addr_b,
         output reg [3:0] reg_addr_w,
@@ -52,9 +52,11 @@ module control_unit(
         output wire pc_inc,
         output reg reg_to_pc,
         output reg pc_to_srr,
+        output reg pc_to_reg,
         output reg srr_to_pc, 
         output reg reg_to_mem,
-        output reg reg_to_reg
+        output reg reg_to_reg,
+        output reg ir_to_reg
     );
     
     wire [2:0] cycle_data;
@@ -97,7 +99,15 @@ module control_unit(
         in_to_reg = 1'b0;
         reg_to_out = 1'b0;
         reg_to_reg = 1'b0;
+        pc_to_reg = 1'b0;
+        ir_to_reg = 1'b0;
         sequencer_com = 1'b0;
+        
+        reg_addr_a = 4'b0;
+        reg_addr_b = 4'b0;
+        reg_addr_w = 4'b0;
+        alu_op = 3'b0;
+        mem_addr = 16'b0;
     
         case (ir_out[15:12])
             ADD: begin
@@ -141,9 +151,10 @@ module control_unit(
             JTS: begin
                 if (cycle_data == 3'b000) begin
                     reg_addr_a = ir_out[7:4];
-                    reg_to_pc = 1'b1;
+                    pc_to_srr = 1'b1;
                 end else begin
                     pc_to_srr = 1'b1;
+                    reg_to_pc = 1'b1;
                     sequencer_com = 1'b1;
                 end
             end
@@ -154,19 +165,29 @@ module control_unit(
             end
             
             LD: begin
-                mem_to_reg = 1'b1;
-                mem_addr = {8'b000000000, ir_out[11:4]};
-                reg_addr_w = ir_out[3:0];
-                sequencer_com = 1'b1;
+                if (cycle_data == 3'b000) begin
+                    mem_addr = {8'b000000000, ir_out[11:4]};
+                end else begin
+                    mem_addr = {8'b000000000, ir_out[11:4]};
+                    mem_to_reg = 1'b1;
+                    reg_addr_w = ir_out[3:0];
+                    sequencer_com = 1'b1;
+                end
             end
             
             LDR: begin
-                mem_to_reg = 1'b1;
-                reg_addr_a = ir_out[11:8];
-                reg_addr_b = ir_out[7:4];
-                reg_addr_w = ir_out[3:0];
-                mem_addr = reg_out_a + reg_out_b;
-                sequencer_com = 1'b1;
+                if (cycle_data == 3'b000) begin
+                    reg_addr_a = ir_out[11:8];
+                    reg_addr_b = ir_out[7:4];
+                    mem_addr = reg_out_a + reg_out_b;
+                end else begin
+                    mem_to_reg = 1'b1;
+                    reg_addr_a = ir_out[11:8];
+                    reg_addr_b = ir_out[7:4];
+                    reg_addr_w = ir_out[3:0];
+                    mem_addr = reg_out_a + reg_out_b;
+                    sequencer_com = 1'b1;
+                end
             end
             
             ST: begin

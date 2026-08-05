@@ -146,7 +146,9 @@ module core(
         .reg_to_mem(reg_to_mem),
         .in_to_reg(in_to_reg),
         .reg_to_out(reg_to_out),
-        .reg_to_reg(reg_to_reg)
+        .reg_to_reg(reg_to_reg),
+        .pc_to_reg(pc_to_reg),
+        .ir_to_reg(ir_to_reg)
     );
     
     program_rom i_program_rom (
