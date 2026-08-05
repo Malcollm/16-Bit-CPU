@@ -92,6 +92,7 @@ module core(
         .reset(reset),
         .reg_data_in(reg_in),
         .alu_out(alu_out),
+        .ir_in(ir_in),
         .ir_out(ir_out),
         .out_in(out_in),
         .pc_out(pc_out),
@@ -145,6 +146,12 @@ module core(
         .in_to_reg(in_to_reg),
         .reg_to_out(reg_to_out),
         .reg_to_reg(reg_to_reg)
+    );
+    
+    program_rom i_program_rom (
+        .clk(clk),
+        .addr(pc_out),
+        .rom_out(ir_in)
     );
     
 endmodule
