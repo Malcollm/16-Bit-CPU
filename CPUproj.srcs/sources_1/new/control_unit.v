@@ -207,6 +207,10 @@ module control_unit(
                 reg_addr_w = ir_out[3:0];
                 sequencer_com = 1'b1;
             end
+            
+            default: begin
+                sequencer_com = 1'b1;
+            end
         endcase
     end
     
