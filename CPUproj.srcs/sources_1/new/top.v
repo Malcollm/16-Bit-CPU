@@ -26,6 +26,8 @@ module top(
     input wire [7:0] ja,
     input wire [7:0] jb,
     
+    input wire [3:0] btn,
+    
     output wire [7:0] jc,
     output wire [7:0] jd
     );
@@ -33,7 +35,8 @@ module top(
     core i_core (
         .clk(CLK100MHZ),
         .in_in({ja, jb}),
-        .out_out({jc, jd})
+        .out_out({jc, jd}),
+        .reset(btn[0])
     );
     
 endmodule
