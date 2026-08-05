@@ -49,7 +49,7 @@ module datapath(
     input wire [15:0] pc_in,
     output wire [15:0] pc_out,
     
-    input wire latch_out,
+    input wire out_write,
     input wire [15:0] in_in,
     output wire [15:0] in_out,
     input wire [15:0] out_in,
@@ -67,7 +67,6 @@ module datapath(
     );
     
     wire [3:0] flags;           // Flags from ALU
-    wire [15:0] reg_data_b;
     
     ALU i_alu (
         .zero_flag(flags[0]),
@@ -115,7 +114,7 @@ module datapath(
         .out_out(out_out),
         .in_out(in_out),
         .in_in(in_in),
-        .latch_out(latch_out)
+        .latch_out(out_write)
     );
     
     instruction_register i_instruction_register (

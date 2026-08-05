@@ -19,6 +19,8 @@
 // Revision 0.03 - Added ops ADD SUB LOG
 // Revision 0.04 - Added ops up to LD and LDR
 // Revision 0.05 - Added ST and STR
+// Revision 0.06 - Added IN and OUT
+// Revision 0.07 - Added MOV
 // Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
@@ -44,11 +46,15 @@ module control_unit(
         
         output reg [2:0] alu_op,
         
+        output reg reg_to_out,
+        output reg in_to_reg,
+        
         output wire pc_inc,
         output reg reg_to_pc,
         output reg pc_to_srr,
         output reg srr_to_pc, 
-        output reg reg_to_mem
+        output reg reg_to_mem,
+        output reg reg_to_reg
     );
     
     wire [2:0] cycle_data;
@@ -88,6 +94,9 @@ module control_unit(
         reg_to_mem = 1'b0;
         pc_to_srr = 1'b0;
         srr_to_pc = 1'b0;
+        in_to_reg = 1'b0;
+        reg_to_out = 1'b0;
+        reg_to_reg = 1'b0;
         sequencer_com = 1'b0;
     
         case (ir_out[15:12])
@@ -178,6 +187,25 @@ module control_unit(
                     mem_addr = temp_mem_addr;
                     sequencer_com = 1'b1;
                 end
+            end
+            
+            IN: begin
+                in_to_reg = 1'b1;
+                reg_addr_w = ir_out[3:0];
+                sequencer_com = 1'b1;
+            end
+            
+            OUT: begin
+                reg_to_out = 1'b1;
+                reg_addr_a = ir_out[3:0];
+                sequencer_com = 1'b1;
+            end
+            
+            MOV: begin
+                reg_to_reg = 1'b1;
+                reg_addr_a = ir_out[11:8];
+                reg_addr_w = ir_out[3:0];
+                sequencer_com = 1'b1;
             end
         endcase
     end

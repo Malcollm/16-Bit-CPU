@@ -35,6 +35,7 @@ module core(
     wire ir_to_reg;
     wire pc_to_reg;
     wire in_to_reg;
+    wire reg_to_reg;
     
     wire reg_to_pc;
     wire srr_to_pc;
@@ -57,6 +58,7 @@ module core(
     wire pc_to_srr;
     wire [15:0] srr_out;
     
+    wire reg_to_out;
     wire [15:0] in_out;
     wire [15:0] out_in;
     
@@ -76,7 +78,8 @@ module core(
                     alu_to_reg ? alu_out : 
                     ir_to_reg ? ir_out :
                     pc_to_reg ? pc_out :
-                    ir_out;
+                    ir_to_reg ? ir_out :
+                    reg_out_a;
     
     assign mem_in = reg_out_a;
     assign ir_in = mem_out;
@@ -102,10 +105,11 @@ module core(
         .reg_addr_w(reg_addr_w),
         .flag_en(flag_en),
         .alu_op(alu_op),
-        .reg_write(alu_to_reg | mem_to_reg | ir_to_reg | pc_to_reg | in_to_reg),
+        .reg_write(alu_to_reg | mem_to_reg | ir_to_reg | pc_to_reg | in_to_reg | reg_to_reg),
         .pc_write(reg_to_pc | srr_to_pc),
         .pc_inc(pc_inc),
-        .srr_write(pc_to_srr)
+        .srr_write(pc_to_srr),
+        .out_write(reg_to_out)
     );
     
     memory i_memory (
@@ -135,7 +139,10 @@ module core(
         .mem_to_reg(mem_to_reg),
         .reg_out_a(reg_out_a),
         .reg_out_b(reg_out_b),
-        .reg_to_mem(reg_to_mem)
+        .reg_to_mem(reg_to_mem),
+        .in_to_reg(in_to_reg),
+        .reg_to_out(reg_to_out),
+        .reg_to_reg(reg_to_reg)
     );
     
 endmodule
