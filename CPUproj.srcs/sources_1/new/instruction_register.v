@@ -16,27 +16,19 @@
 // Revision:
 // Revision 0.01 - File Created
 // Revision 0.02 - Made IR
+// Revision 0.03 - Made IR combinational
 // Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
 
 module instruction_register(
-        input wire clk,
         input wire reset,
-        input wire write,
         
         input wire [15:0] data_in,
-        output reg [15:0] data_out
+        output wire [15:0] data_out
     );
     
-    always @(posedge clk) begin
-        if (reset) begin
-            data_out <= 16'b0;
-        end
-        else if (write) begin
-            data_out <= data_in;
-        end
-    end
+    assign data_out = reset ? 16'b0 : data_in;
     
 endmodule

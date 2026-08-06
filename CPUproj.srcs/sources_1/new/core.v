@@ -112,7 +112,6 @@ module core(
         .srr_write(pc_to_srr),
         .out_write(reg_to_out),
         .in_out(in_out),
-        .ir_write(1'b1),
         .pc_in(pc_in)
     );
     
@@ -152,7 +151,6 @@ module core(
     );
     
     program_rom i_program_rom (
-        .clk(clk),
         .addr(pc_out),
         .rom_out(ir_in)
     );

@@ -55,7 +55,6 @@ module datapath(
     input wire [15:0] out_in,
     output wire [15:0] out_out,
     
-    input wire ir_write,
     input wire [15:0] ir_in,
     output wire [15:0] ir_out,
     
@@ -118,9 +117,7 @@ module datapath(
     );
     
     instruction_register i_instruction_register (
-        .clk(clk),
         .reset(reset),
-        .write(ir_write),
         .data_in(ir_in),
         .data_out(ir_out)
     );
@@ -128,7 +125,7 @@ module datapath(
     subroutine_register i_subroutine_register (
         .clk(clk),
         .write(srr_write),
-        .data_in(pc_out),
+        .data_in(pc_out + 16'b1),
         .data_out(srr_out)
     );
 endmodule

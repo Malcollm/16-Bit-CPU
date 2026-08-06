@@ -150,10 +150,9 @@ module control_unit(
             
             JTS: begin
                 if (cycle_data == 3'b000) begin
-                    reg_addr_a = ir_out[7:4];
                     pc_to_srr = 1'b1;
                 end else begin
-                    pc_to_srr = 1'b1;
+                    reg_addr_a = ir_out[7:4];
                     reg_to_pc = 1'b1;
                     sequencer_com = 1'b1;
                 end
@@ -201,7 +200,6 @@ module control_unit(
                 if (cycle_data == 3'b000) begin
                     reg_addr_a = ir_out[11:8];
                     reg_addr_b = ir_out[7:4];
-                    temp_mem_addr = reg_out_a + reg_out_b;
                 end else begin
                     reg_to_mem = 1'b1;
                     reg_addr_a = ir_out[3:0];
@@ -233,6 +231,12 @@ module control_unit(
                 sequencer_com = 1'b1;
             end
         endcase
+    end
+    
+    always @(posedge clk) begin
+        if (ir_out[15:12] == STR && cycle_data == 3'b000) begin
+            temp_mem_addr <= reg_out_a + reg_out_b;
+        end
     end
     
 endmodule

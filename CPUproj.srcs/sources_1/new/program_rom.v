@@ -22,9 +22,8 @@
 
 
 module program_rom (
-    input wire clk,
     input wire [15:0] addr,
-    output reg [15:0] rom_out
+    output wire [15:0] rom_out
 );
 
     reg [15:0] rom [0:20];
@@ -33,8 +32,6 @@ module program_rom (
         $readmemh("program.mem", rom);
     end
 
-    always @(posedge clk) begin
-        rom_out <= rom[addr];
-    end
+    assign rom_out = rom[addr];
 
 endmodule
