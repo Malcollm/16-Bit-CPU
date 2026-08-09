@@ -21,12 +21,17 @@ module core_tb;
         
         reset = 1'b0;
         inputs = 16'h0000;
+        #50
+        inputs = 16'h0004;
+        #50
+        inputs = 16'h0002;
         
         repeat (40) @(posedge clk);
         
         $finish;
     end
     
+    initial clk = 1'b0;
     always #5 clk = ~clk;
     
 endmodule
