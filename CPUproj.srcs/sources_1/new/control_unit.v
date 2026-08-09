@@ -56,15 +56,18 @@ module control_unit(
         output reg srr_to_pc, 
         output reg reg_to_mem,
         output reg reg_to_reg,
-        output reg ir_to_reg
+        output reg ir_to_reg,
+        output reg prog_to_reg
     );
     
     wire [2:0] cycle_data;
+    reg pc_next;
     reg sequencer_com;
     
     reg [15:0] temp_mem_addr;
+    reg [3:0] con_dest;
     
-    assign pc_inc = sequencer_com;
+    assign pc_inc = sequencer_com | pc_next;
     
     localparam ADD = 4'b0000;
     localparam SUB = 4'b0001;
@@ -80,6 +83,8 @@ module control_unit(
     localparam OUT = 4'b1011;
     localparam MOV = 4'b1100;
     localparam HLT = 4'b1101;
+    localparam CON = 4'b1110;
+    localparam NOP = 4'b1111;
     
     sequencer i_sequencer (
         .clk(clk),
@@ -101,7 +106,9 @@ module control_unit(
         reg_to_reg = 1'b0;
         pc_to_reg = 1'b0;
         ir_to_reg = 1'b0;
+        prog_to_reg = 1'b0;
         sequencer_com = 1'b0;
+        pc_next = 1'b0;
         
         reg_addr_a = 4'b0;
         reg_addr_b = 4'b0;
@@ -227,8 +234,19 @@ module control_unit(
                 sequencer_com = 1'b1;
             end
             
+            CON: begin
+                if (cycle_data == 3'b000) begin
+                    pc_next = 1'b1;
+                end else begin
+                    prog_to_reg = 1'b1;
+                    reg_addr_w = con_dest;
+                    sequencer_com = 1'b1;
+                end
+            end
+            
             default: begin
                 sequencer_com = 1'b1;
+                
             end
         endcase
     end
@@ -236,6 +254,10 @@ module control_unit(
     always @(posedge clk) begin
         if (ir_out[15:12] == STR && cycle_data == 3'b000) begin
             temp_mem_addr <= reg_out_a + reg_out_b;
+        end
+        
+        if (ir_out[15:12] == CON && cycle_data == 3'b000) begin
+            con_dest <= ir_out[3:0];
         end
     end
     

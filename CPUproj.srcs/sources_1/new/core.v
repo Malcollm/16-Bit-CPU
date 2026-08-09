@@ -44,6 +44,8 @@ module core(
     
     wire flag_en;
     
+    wire prog_to_reg;
+    
     wire [15:0] ir_out;
     wire [15:0] ir_in;
     
@@ -80,6 +82,7 @@ module core(
                     ir_to_reg ? ir_out :
                     pc_to_reg ? pc_out :
                     in_to_reg ? in_out :
+                    prog_to_reg ? ir_in :
                     reg_out_a;
     
     assign mem_in = reg_out_a;
@@ -106,7 +109,7 @@ module core(
         .reg_addr_w(reg_addr_w),
         .flag_en(flag_en),
         .alu_op(alu_op),
-        .reg_write(alu_to_reg | mem_to_reg | ir_to_reg | pc_to_reg | in_to_reg | reg_to_reg),
+        .reg_write(alu_to_reg | mem_to_reg | ir_to_reg | pc_to_reg | in_to_reg | reg_to_reg | prog_to_reg),
         .pc_write(reg_to_pc | srr_to_pc),
         .pc_inc(pc_inc),
         .srr_write(pc_to_srr),
@@ -147,7 +150,8 @@ module core(
         .reg_to_out(reg_to_out),
         .reg_to_reg(reg_to_reg),
         .pc_to_reg(pc_to_reg),
-        .ir_to_reg(ir_to_reg)
+        .ir_to_reg(ir_to_reg),
+        .prog_to_reg(prog_to_reg)
     );
     
     program_rom i_program_rom (
