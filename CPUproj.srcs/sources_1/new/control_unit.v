@@ -244,6 +244,7 @@ module control_unit(
                     pc_next = 1'b1;
                 end
                 
+                
                 default: begin
                     sequencer_com = 1'b1;
                 end
