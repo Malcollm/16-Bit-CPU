@@ -146,8 +146,8 @@ module control_unit(
                 LOG: begin
                     flag_en = ir_out[11];
                     alu_to_reg = 1'b1;
-                    reg_addr_a = ir_out[3:0];
-                    reg_addr_b = ir_out[7:4];
+                    reg_addr_a = ir_out[7:4];
+                    reg_addr_b = ir_out[3:0];
                     reg_addr_w = ir_out[7:4];
                     alu_op = ir_out[10:8];
                     sequencer_com = 1'b1;
