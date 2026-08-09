@@ -16,13 +16,14 @@
 // Revision:
 // Revision 0.01 - File Created
 // Revision 0.02 - Added IO pins
+// Revision 0.03 - Drop clock down to 12 MHz
 // Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
 
 module top(
-    input wire CLK100MHZ,
+    input wire CLK12MHZ,
     input wire [7:0] ja,
     input wire [7:0] jb,
     
@@ -33,7 +34,7 @@ module top(
     );
     
     core i_core (
-        .clk(CLK100MHZ),
+        .clk(CLK12MHZ),
         .in_in({ja, jb}),
         .out_out({jc, jd}),
         .reset(btn[0])

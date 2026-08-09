@@ -11,7 +11,7 @@
 // Tool Versions: 2025.2
 // Description: datapath + memory + control unit
 // 
-// Dependencies: datapath.v, memory.v
+// Dependencies: datapath.v, memory.v, program_rom.v, control_unit.v
 // 
 // Revision:
 // Revision 0.01 - File Created
