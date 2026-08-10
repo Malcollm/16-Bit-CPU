@@ -26,7 +26,7 @@ module core_tb;
         #200
         inputs = 16'h0002;
         
-        repeat (40) @(posedge clk);
+        repeat (70) @(posedge clk);
         
         $finish;
     end
