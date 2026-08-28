@@ -161,7 +161,7 @@ The jump target is always the address held in register `R[T]` (load it first wit
 
 ## Memory model
 
-This is a **Harvard** machine — instructions and data live in separate memories:
+This is a **Harvard** machine instructions and data live in separate memories:
 
 - **Program ROM** (`program_rom`): 2049 × 16-bit, read-only, **combinational** read
   addressed directly by the PC. Initialized at power-up from `program.mem`.
@@ -177,7 +177,7 @@ This is a **Harvard** machine — instructions and data live in separate memorie
 
 Fetch is **single-cycle and PC-synchronized**: the PC drives the combinational ROM,
 whose output passes through the transparent instruction register straight into the
-decoder, so the instruction is valid the same cycle the PC points at it — no fetch bubble.
+decoder, so the instruction is valid the same cycle the PC points at it no fetch bubble.
 
 The `sequencer` counts sub-cycles for multi-cycle instructions. The PC holds while an
 instruction is mid-execution and advances when the instruction completes:
